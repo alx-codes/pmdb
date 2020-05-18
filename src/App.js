@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Header } from './components'
+
+import { fetchData } from "./api";
+
+const langs = {"en-US": "English", "es-MX": "Español"};
+const clientLang = window.navigator.language;
+
+class App extends Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			data: {},
+			lang: (langs[clientLang] !== undefined) ? clientLang : 'es-MX',
+		}
+
+		//this.handleClick = this.handleClick.bind(this);
+	}
+
+	componentDidMount = async () => {
+		const fetchedData = await fetchData("/movie/top_rated");
+		this.setState({data: fetchedData})
+	}
+	
+	render() {
+		return (
+			<>
+				<Header />
+			</>
+		)
+	}
 }
 
 export default App;
